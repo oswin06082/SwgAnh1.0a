@@ -12,17 +12,68 @@
             <url>src/PacketFactory.java</url>
             <bookmark id="0">
                 <name/>
-                <line>963</line>
+                <line>965</line>
                 <key/>
             </bookmark>
             <bookmark id="0">
                 <name/>
-                <line>7050</line>
+                <line>7052</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/CreatureAnimal.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/ColorManager.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/SWGEmail.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/ZoneServerScreen.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/IntangibleObject.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/SOEObject.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/CraftingTool.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/ZoneClient.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/Deed.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/SWGGui.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/Constants.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/DatabaseInterface.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/BazaarTerminal.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/ResourceContainer.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/SUIWindow.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/RadialMenuItem.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/Structure.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/NPCUpdateThread.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/DataLog.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/MedicalItem.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/RadialTemplateData.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/Player.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/ZoneClientThread.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/ManufacturingSchematic.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/TangibleItem.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/Terminal.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/PacketFactory.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/Harvester.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/NPC.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/Attribute.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/Shuttle.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/CreaturePet.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/ZoneServer.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/EmailServer.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/BuffEffect.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/ChatServer.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/Armor.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/CombatAction.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/Factory.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/AccountData.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/PlayerItem.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/Lair.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/LoginClient.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/Vehicle.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/ResourceManager.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/Camp.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/LoginServer.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/Cell.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/CraftingSchematic.java</file>
+            <file>file:/D:/Swganh1.01a/shard-of-the-force-reborn-master/SWGCombined/src/Chatroom.java</file>
+        </group>
     </open-files>
 </project-private>

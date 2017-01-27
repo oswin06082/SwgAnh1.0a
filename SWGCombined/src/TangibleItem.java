@@ -1,5 +1,6 @@
 import java.io.IOException;
-import java.util.Vector;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * The TangibleItem class represents an actual item in the SWG game world.  For example:  A painting would be a TangibleItem.
@@ -16,19 +17,19 @@ public class TangibleItem extends SOEObject implements Experimentable {
 	private long iContainerID;
 	private long iOwnerID;
 	private SOEObject iContainer;
-	private Vector<TangibleItem> vLinkedObjects; // Inventory container specific
-	private Vector<IntangibleObject> vContainedIntangibleObjects; // Datapad specific
+	private List<TangibleItem> vLinkedObjects; // Inventory container specific
+	private List<IntangibleObject> vContainedIntangibleObjects; // Datapad specific
 	private String sUserOptions = null;
 	private int iCurrentCondition;
 	private int iMaxCondition;    
 	private int iSocketCount = 0;
     private boolean bHasSockets = false;
     private int iSocketsLeft = 0;
-    private Vector<SocketAttachment> vAttachmentList;
+    private List<SocketAttachment> vAttachmentList;
     private int iToolSurveyRange = -1; // Survey tool specific
-    private Vector<MissionObject> vMissionList; // Mission bag specific
-    private Vector<MissionObject> vEmptyMissionList;
-    private Vector<MissionObject> vAcceptedMissionList;
+    private List<MissionObject> vMissionList; // Mission bag specific
+    private List<MissionObject> vEmptyMissionList;
+    private List<MissionObject> vAcceptedMissionList;
     
     private boolean bSendsEquipedState = true;
     private boolean bIsNoTradeItem;
@@ -36,7 +37,7 @@ public class TangibleItem extends SOEObject implements Experimentable {
     private long lBiolinkID;
     private float fComplexity = 1.0f;
     private long lCrafterID;
-    private Vector<SkillModifier> vSkillModifiers;
+    private List<SkillModifier> vSkillModifiers;
     private long lSaleTimeMS = 0l;
     private BazaarTerminal saleTerminal = null;
     private boolean bInstantSale = true;
@@ -51,7 +52,7 @@ public class TangibleItem extends SOEObject implements Experimentable {
     private transient long lSampleTimeMS = 0;
     private transient SpawnedResourceData resourceToSurvey;
     
-    private transient Vector<MissionObject> vRefreshedMissionList; // Mission bag specific
+    private transient List<MissionObject> vRefreshedMissionList; // Mission bag specific
     
 
         
@@ -60,13 +61,13 @@ public class TangibleItem extends SOEObject implements Experimentable {
 	 */
 	public TangibleItem() {
 		super();
-		vLinkedObjects = new Vector<TangibleItem>();
-		vContainedIntangibleObjects = new Vector<IntangibleObject>();
-        vAttachmentList = new Vector<SocketAttachment>();
+		vLinkedObjects = new ArrayList<TangibleItem>();
+		vContainedIntangibleObjects = new ArrayList<IntangibleObject>();
+        vAttachmentList = new ArrayList<SocketAttachment>();
         iToolSurveyRange = -1;
-        vMissionList = new Vector<MissionObject>();
-        vAcceptedMissionList = new Vector<MissionObject>();
-        vEmptyMissionList = new Vector<MissionObject>();
+        vMissionList = new ArrayList<MissionObject>();
+        vAcceptedMissionList = new ArrayList<MissionObject>();
+        vEmptyMissionList = new ArrayList<MissionObject>();
         bSendsEquipedState = true;
         lCrafterID = 0;
 	}
@@ -219,9 +220,9 @@ public class TangibleItem extends SOEObject implements Experimentable {
 		            			if (!bCouldUpdate){
 		            				System.out.println("Could not update current resource container -- searching for a match in inventory.");
 		            				boolean bFound = false;
-		            				Vector<TangibleItem> vInventoryItems = player.getInventoryItems();
+		            				List<TangibleItem> vInventoryItems = player.getInventoryItems();
 		            				for (int i = 0; i < vInventoryItems.size() && !bFound; i++) {
-		            					TangibleItem item = vInventoryItems.elementAt(i);
+		            					TangibleItem item = vInventoryItems.get(i);
 		            					if (item instanceof ResourceContainer) {
 		            						ResourceContainer tempContainer = (ResourceContainer) item;
 		            						if (tempContainer.getResourceSpawnID() == resourceTypeID) {
@@ -518,7 +519,7 @@ public class TangibleItem extends SOEObject implements Experimentable {
 	 * Gets the list of TangibleItem object which this TangibleItem contains.
 	 * @return The list of contained items.
 	 */
-	protected Vector<TangibleItem> getLinkedObjects() {
+	protected List<TangibleItem> getLinkedObjects() {
 		return vLinkedObjects;
 	}
 	
@@ -528,7 +529,7 @@ public class TangibleItem extends SOEObject implements Experimentable {
 	 */
 	protected void addIntangibleObject(IntangibleObject o) {
 		if (vContainedIntangibleObjects == null) {
-			vContainedIntangibleObjects = new Vector<IntangibleObject>();
+			vContainedIntangibleObjects = new ArrayList<IntangibleObject>();
 		}
 		if (!vContainedIntangibleObjects.contains(o)) {
 			vContainedIntangibleObjects.add(o);
@@ -548,7 +549,7 @@ public class TangibleItem extends SOEObject implements Experimentable {
 	 * Gets the list of IntangibleObject contained by this TangibleItem.
 	 * @return The list of Intangibles.
 	 */
-	protected Vector<IntangibleObject> getIntangibleObjects() {
+	protected List<IntangibleObject> getIntangibleObjects() {
 		return vContainedIntangibleObjects;
 	}
 	
@@ -1038,37 +1039,37 @@ public class TangibleItem extends SOEObject implements Experimentable {
     		setIsCoolingDown(false);
         }
 
-        public Vector<MissionObject> getVMissionList() {
+        public List<MissionObject> getVMissionList() {
             return vMissionList;
         }
 
-        public void setVMissionList(Vector<MissionObject> vMissionList) {
+        public void setVMissionList(List<MissionObject> vMissionList) {
             this.vMissionList = vMissionList;
         }
         
         public void addMissionObjectToRefreshList(MissionObject m){
             if(vRefreshedMissionList == null)
             {
-                vRefreshedMissionList = new Vector<MissionObject>();
+                vRefreshedMissionList = new ArrayList<MissionObject>();
             }
             vRefreshedMissionList.add(m);
         }
         public void clearMissionObjectRefreshList(){
             if(vRefreshedMissionList == null)
             {
-                vRefreshedMissionList = new Vector<MissionObject>();
+                vRefreshedMissionList = new ArrayList<MissionObject>();
             }
             vRefreshedMissionList.clear();
         }
         
-        public Vector<MissionObject> getMissionObjectRefreshList(){
+        public List<MissionObject> getMissionObjectRefreshList(){
             return vRefreshedMissionList;
         }
         
         public void addMissionObjectToAcceptedList(MissionObject m){
             if(vAcceptedMissionList == null)
             {
-                vAcceptedMissionList = new Vector<MissionObject>();
+                vAcceptedMissionList = new ArrayList<MissionObject>();
             }
             vAcceptedMissionList.add(m);
             for(int i = 0; i < vMissionList.size(); i++)
@@ -1104,7 +1105,7 @@ public class TangibleItem extends SOEObject implements Experimentable {
             }                
         }
         
-        public Vector<MissionObject> getMissionObjectAcceptedList(){
+        public List<MissionObject> getMissionObjectAcceptedList(){
             return vAcceptedMissionList;
         }
 
@@ -1116,7 +1117,7 @@ public class TangibleItem extends SOEObject implements Experimentable {
             this.bSendsEquipedState = bSendsEquipedState;
         }
 
-        public void setVEmptyMissionList(Vector<MissionObject> vEmptyMissionList) {
+        public void setVEmptyMissionList(List<MissionObject> vEmptyMissionList) {
             this.vEmptyMissionList = vEmptyMissionList;
         }
         
@@ -1258,7 +1259,7 @@ public class TangibleItem extends SOEObject implements Experimentable {
     protected void addSkillModifier(SkillModifier mod){
         if(vSkillModifiers == null)
         {
-            vSkillModifiers = new Vector<SkillModifier>();
+            vSkillModifiers = new ArrayList<SkillModifier>();
         }
         if(!vSkillModifiers.contains(mod))
         {
@@ -1269,7 +1270,7 @@ public class TangibleItem extends SOEObject implements Experimentable {
     protected void removeSkillModifier(SkillModifier mod){
         if(vSkillModifiers == null)
         {
-            vSkillModifiers = new Vector<SkillModifier>();
+            vSkillModifiers = new ArrayList<SkillModifier>();
         }
         if(vSkillModifiers.contains(mod))
         {
@@ -1277,10 +1278,10 @@ public class TangibleItem extends SOEObject implements Experimentable {
         }
     }
 
-    protected Vector<SkillModifier> getSkillModifiers(){
+    protected List<SkillModifier> getSkillModifiers(){
         if(vSkillModifiers==null)
         {
-            vSkillModifiers = new Vector<SkillModifier>();
+            vSkillModifiers = new ArrayList<SkillModifier>();
         }
         return vSkillModifiers;
     }

@@ -1,8 +1,8 @@
-Swganh
+shard-of-the-force-reborn
 =========================
-The Swganh Open Source Project's aim is to create a server emulator for the sandbox MMO Star Wars Galaxies at its pre-cu publish 14.1 
+The shard-of-the-force-reborn Open Source Project's aim is to create a server emulator for the sandbox MMO Star Wars Galaxies at its pre-cu publish 14.1 
 
-
+original owner https://www.assembla.com/user/popup_profile/aergad
 
 Requirements for Building the Core:
 =========================
@@ -19,7 +19,7 @@ Requirements for Building the Core:
 </ul>
 Once you have met the requirements, fork the project(click on the fork button) and then clone your forked repository. If you are using Windows then you can clone the repository with Github for Windows, otherwise you can use the following git command:
 
-git clone https://github.com/your_account_name/Swganh1.0a.git
+git clone https://github.com/your_account_name/shard-of-the-force-reborn.git
 
 Then you can import the project to Netbeans
 

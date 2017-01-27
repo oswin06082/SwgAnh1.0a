@@ -1,5 +1,6 @@
 import java.io.IOException;
-import java.util.Vector;
+import java.util.List;
+import java.util.ArrayList;
 
 
 public class CraftingTool extends TangibleItem {
@@ -28,7 +29,7 @@ public class CraftingTool extends TangibleItem {
 					// TODO:  Inventory size check.  
 					TangibleItem inventory = player.getInventory();
 					
-					Vector<TangibleItem> vAllInventoryItems = inventory.getLinkedObjects();
+					List<TangibleItem> vAllInventoryItems = inventory.getLinkedObjects();
 					if (vAllInventoryItems.size() > Constants.MAX_ITEMS_IN_INVENTORY) {
 						client.insertPacket(PacketFactory.buildChatSystemMessage("system_msg", "prototype_not_transferred", 0, null, null, null,0, null, null, null,0, null, null, null,0, 0, false));
 						

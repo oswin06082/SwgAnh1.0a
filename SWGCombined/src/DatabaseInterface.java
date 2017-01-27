@@ -19,12 +19,14 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.TreeSet;
-import java.util.Vector;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
+
 
 /**
  * The DatabaseInterface handles all saving and loading of data from the MySQL
@@ -51,19 +53,19 @@ public class DatabaseInterface implements Runnable {
 	private static Hashtable<Integer, Skills> vSkillsListByIndex = null;
 	private static Hashtable<Integer, Skills> vSkillsListByCommandCRC = null;
 	private static Hashtable<Integer, RadialTemplateData> vRadialTemplateData;
-	private Vector<Player> vAllPlayers = null;
-	private static Vector<AccountData> vAccounts = null;
+	private List<Player> vAllPlayers = null;
+	private static List<AccountData> vAccounts = null;
 	private static Hashtable<Integer, Experience> vExperienceTypes = null;
 	private static Hashtable<Integer, ItemTemplate> vItemTemplateData;
 	private Thread myThread;
-	private static Vector<DatabaseServerInfoContainer> vServerInfoContainer = null;
+	private static List<DatabaseServerInfoContainer> vServerInfoContainer = null;
 	private SWGGui theGUI;
-	private static Vector<String> vCharacterNameFilterProfane; // 12
-	private static Vector<String> vCharacterNameFilterSyntax; // 16
-	private static Vector<String> vCharacterNameFilterDeveloper; // 2
-	private static Vector<String> vCharacterNameFilterCanonical; // 4
-	private static Vector<String> vCharacterNameFilterNumber; // 11
-	private static Hashtable<Integer, Vector<POI>> vPOIsByPlanetID;
+	private static List<String> vCharacterNameFilterProfane; // 12
+	private static List<String> vCharacterNameFilterSyntax; // 16
+	private static List<String> vCharacterNameFilterDeveloper; // 2
+	private static List<String> vCharacterNameFilterCanonical; // 4
+	private static List<String> vCharacterNameFilterNumber; // 11
+	private static Hashtable<Integer, List<POI>> vPOIsByPlanetID;
 	// private static HashMap<Integer, Vector<String>> vAllUsedCharacterNames;
 	private static Hashtable<Integer, ResourceTemplateData> vResourceTemplateData;
 	private final static long HEARTBEAT_DELAY_MS = 900000;
@@ -76,15 +78,15 @@ public class DatabaseInterface implements Runnable {
 	// private static int iEncryptionKey;
 	private static Hashtable<Integer, MissionTemplate> vMissionTemplateData;
 	private static Hashtable<Integer, MissionCollateral> vMissionCollateralData;
-	private static Vector<DeedTemplate> vDeedTemplates;
-	private static HashMap<Integer, Vector<CraftingSchematic>> vSchematicsBySkillID;
+	private static List<DeedTemplate> vDeedTemplates;
+	private static HashMap<Integer, List<CraftingSchematic>> vSchematicsBySkillID;
 	private static CraftingSchematic[] vSchematicsByIndex;
 	private static HashMap<Integer, SignIndexData> vServerSignIndexData;
 	private static Hashtable<Integer, IFFData> vDecodedIFFData;
 	// private static Hashtable<String, String> vResourceNameStrings;
-	private static Vector<Long> vRestrictedAccessCells;
+	private static List<Long> vRestrictedAccessCells;
 	private static ZoneServerRunOptions runOptions;
-	private static Vector<StartingLocation> vStartingLocations;
+	private static List<StartingLocation> vStartingLocations;
 	private static Hashtable<Integer, CombatAction> vSpecialAttacks;
 	private static LoginIntegration integrationData;
 	private int iZoneServerID = -1;
@@ -98,19 +100,19 @@ public class DatabaseInterface implements Runnable {
 			int zoneServerID) {
 		iZoneServerID = zoneServerID;
 		try {
-			vCharacterNameFilterProfane = new Vector<String>();
-			vCharacterNameFilterSyntax = new Vector<String>();
-			vCharacterNameFilterDeveloper = new Vector<String>();
-			vCharacterNameFilterCanonical = new Vector<String>();
-			vCharacterNameFilterNumber = new Vector<String>();
+			vCharacterNameFilterProfane = new ArrayList<String>();
+			vCharacterNameFilterSyntax = new ArrayList<String>();
+			vCharacterNameFilterDeveloper = new ArrayList<String>();
+			vCharacterNameFilterCanonical = new ArrayList<String>();
+			vCharacterNameFilterNumber = new ArrayList<String>();
 			vRadialTemplateData = new Hashtable<Integer, RadialTemplateData>();
-			vSchematicsBySkillID = new HashMap<Integer, Vector<CraftingSchematic>>();
-			vRestrictedAccessCells = new Vector<Long>();
+			vSchematicsBySkillID = new HashMap<Integer, List<CraftingSchematic>>();
+			vRestrictedAccessCells = new ArrayList<Long>();
 			vSchematicsByIndex = null;
-			vPOIsByPlanetID = new Hashtable<Integer, Vector<POI>>();
+			vPOIsByPlanetID = new Hashtable<Integer, List<POI>>();
 			vMissionTemplateData = new Hashtable<Integer, MissionTemplate>();
 			vMissionCollateralData = new Hashtable<Integer, MissionCollateral>();
-			vDeedTemplates = new Vector<DeedTemplate>();
+			vDeedTemplates = new ArrayList<DeedTemplate>();
 			vServerSignIndexData = new HashMap<Integer, SignIndexData>();
 			vDecodedIFFData = new Hashtable<Integer, IFFData>();
 			sDatabaseAddress = dbaseAddress;
@@ -121,7 +123,7 @@ public class DatabaseInterface implements Runnable {
 			bEncryptPasswords = boolEncryptPasswords;
 			// iEncryptionKey = intEncryptionKey;
 			// vResourceNameStrings = new Hashtable<String, String>();
-			vStartingLocations = new Vector<StartingLocation>();
+			vStartingLocations = new ArrayList<StartingLocation>();
 			vSpecialAttacks = new Hashtable<Integer, CombatAction>();
 			if (sDatabaseName == null) {
 				DataLog.logEntry(
@@ -461,7 +463,7 @@ public class DatabaseInterface implements Runnable {
 		}
 	}
 
-	protected static Vector<AccountData> getAccounts() {
+	protected static List<AccountData> getAccounts() {
 		if (vAccounts == null) {
 			loadAccounts();
 		}
@@ -477,7 +479,7 @@ public class DatabaseInterface implements Runnable {
 		Statement s=  null;
 		ResultSet result = null;
 		try {
-			vAccounts = new Vector<AccountData>();
+			vAccounts = new ArrayList<AccountData>();
 			s = conn.createStatement();
 			String query;
 			/*
@@ -980,7 +982,7 @@ public class DatabaseInterface implements Runnable {
 		ResultSet result = null;
 		ConcurrentHashMap<Long, Player> vPlayersThisServer = new ConcurrentHashMap<Long, Player>();
 		try {
-			Vector<String> vCharacterNames = new Vector<String>();
+			List<String> vCharacterNames = new ArrayList<String>();
 			String query = "Select * from `character` where `server_id` = "
 					+ server.getServerID() + ";";
 			s = conn.createStatement();
@@ -1028,10 +1030,10 @@ public class DatabaseInterface implements Runnable {
 						player.setAccountID(savedAccountID);
 					}
 					player.setMaxVelocity(Constants.MAX_PLAYER_RUN_SPEED_METERS_SEC);
-					Vector<TangibleItem> vAllPlayerItems = player
+					List<TangibleItem> vAllPlayerItems = player
 							.getInventoryItems();
 					for (int i = 0; i < vAllPlayerItems.size(); i++) {
-						TangibleItem item = vAllPlayerItems.elementAt(i);
+						TangibleItem item = vAllPlayerItems.get(i);
 						server.addObjectToAllObjects(item, false, false);
 
 						/*
@@ -1049,17 +1051,17 @@ public class DatabaseInterface implements Runnable {
 							player.getInventory().addLinkedObject(item);
 						}
 					}
-					Vector<Waypoint> vPlayerWaypoints = player.getPlayData()
+					List<Waypoint> vPlayerWaypoints = player.getPlayData()
 							.getWaypoints();
 					for (int i = 0; i < vPlayerWaypoints.size(); i++) {
-						Waypoint w = vPlayerWaypoints.elementAt(i);
+						Waypoint w = vPlayerWaypoints.get(i);
 						server.addObjectToAllObjects(w, false, false);
 					}
-					Vector<IntangibleObject> vAllDatapadObjects = player
+					List<IntangibleObject> vAllDatapadObjects = player
 							.getDatapad().getIntangibleObjects();
 					for (int i = 0; i < vAllDatapadObjects.size(); i++) {
 						server.addObjectToAllObjects(vAllDatapadObjects
-								.elementAt(i), false, false);
+								.get(i), false, false);
 					}
 					server.addObjectToAllObjects(player.getBank(), false,false);
 					server.addObjectToAllObjects(player.getDatapad(), false,false);
@@ -1074,7 +1076,7 @@ public class DatabaseInterface implements Runnable {
 					// updatePlayer(player, false,false);
 
 					TangibleItem DataPad = player.getDatapad();
-					Vector<IntangibleObject> vItnos = DataPad.getIntangibleObjects();
+					List<IntangibleObject> vItnos = DataPad.getIntangibleObjects();
 					for (int i = 0; i < vItnos.size(); i++) {
 						IntangibleObject itno = vItnos.get(i);
 						SOEObject ac = itno.getAssociatedCreature();
@@ -1180,7 +1182,7 @@ public class DatabaseInterface implements Runnable {
 	 * 
 	 * @return -- The list of all Players.
 	 */
-	protected Vector<Player> loadPlayers() {
+	protected List<Player> loadPlayers() {
 		/*
 		 * This function loads all characters for a player so we can present
 		 * them to the client ui in the character list.
@@ -1188,7 +1190,7 @@ public class DatabaseInterface implements Runnable {
 		if (vAllPlayers != null) {
 			return vAllPlayers;
 		}
-		vAllPlayers = new Vector<Player>();
+		vAllPlayers = new ArrayList<Player>();
 		Statement s = null;
 		ResultSet result = null;
 		try {
@@ -1613,7 +1615,7 @@ public class DatabaseInterface implements Runnable {
 	 * Loads the list of known Zone Servers from the database.
 	 */
 	private static void loadZoneServerData() {
-		vServerInfoContainer = new Vector<DatabaseServerInfoContainer>();
+		vServerInfoContainer = new ArrayList<DatabaseServerInfoContainer>();
 		Statement s = null;
 		ResultSet r = null;
 		PreparedStatement d = null;
@@ -1737,7 +1739,7 @@ public class DatabaseInterface implements Runnable {
 	 * 
 	 * @return -- The list of Zone Servers.
 	 */
-	public static Vector<DatabaseServerInfoContainer> getZoneServers(
+	public static List<DatabaseServerInfoContainer> getZoneServers(
 			boolean bIsDeveloper) {
 		if (vServerInfoContainer == null) {
 			loadZoneServerData();
@@ -1745,10 +1747,10 @@ public class DatabaseInterface implements Runnable {
 		if (bIsDeveloper) {
 			return vServerInfoContainer;
 		} else {
-			Vector<DatabaseServerInfoContainer> vContainers = new Vector<DatabaseServerInfoContainer>();
+			List<DatabaseServerInfoContainer> vContainers = new ArrayList<DatabaseServerInfoContainer>();
 			for (int i = 0; i < vServerInfoContainer.size(); i++) {
 				DatabaseServerInfoContainer container = vServerInfoContainer
-						.elementAt(i);
+						.get(i);
 				if (!container.bDevOnlyServer) {
 					vContainers.add(container);
 				}
@@ -1767,7 +1769,7 @@ public class DatabaseInterface implements Runnable {
 
 		for (int i = 0; i < vServerInfoContainer.size(); i++) {
 			DatabaseServerInfoContainer container = vServerInfoContainer
-					.elementAt(i);
+					.get(i);
 			if (container.iServerID == iServerID) {
 				return container;
 			}
@@ -1820,7 +1822,7 @@ public class DatabaseInterface implements Runnable {
 				d = new Deed(144, getDeedTemplateByID(144)
 						.getObject_template_id(), p.getServer());
 				d.setOwner(p);
-				Vector<TangibleItem> vPI = p.getInventory().getLinkedObjects();
+				List<TangibleItem> vPI = p.getInventory().getLinkedObjects();
 				for (int i = 0; i < vPI.size(); i++) {
 					TangibleItem t = vPI.get(i);
 					if (t.getTemplateID() == d.getTemplateID()) {
@@ -2132,7 +2134,7 @@ public class DatabaseInterface implements Runnable {
 	 * @param p
 	 */
 	private void createPlayerMissionSet(Player p) {
-		Vector<MissionObject> vML = new Vector<MissionObject>();
+		List<MissionObject> vML = new ArrayList<MissionObject>();
 		ItemTemplate template = getTemplateDataByFilename(Constants.STF_CRC_NAMES[Constants.STF_MISSION_OBJECT]);
 		String[] MissionGiver = new String[2];
 		MissionGiver[0] = "";
@@ -3376,31 +3378,31 @@ public class DatabaseInterface implements Runnable {
 		}
 		String sComparatorString = null;
 		for (int i = 0; i < vCharacterNameFilterDeveloper.size(); i++) {
-			sComparatorString = vCharacterNameFilterDeveloper.elementAt(i);
+			sComparatorString = vCharacterNameFilterDeveloper.get(i);
 			if (str.contains(sComparatorString)) {
 				return Constants.NAME_DECLINED_IS_DEVELOPER;
 			}
 		}
 		for (int i = 0; i < vCharacterNameFilterCanonical.size(); i++) {
-			sComparatorString = vCharacterNameFilterCanonical.elementAt(i);
+			sComparatorString = vCharacterNameFilterCanonical.get(i);
 			if (str.contains(sComparatorString)) {
 				return Constants.NAME_DECLINED_IS_CANONICAL;
 			}
 		}
 		for (int i = 0; i < vCharacterNameFilterNumber.size(); i++) {
-			sComparatorString = vCharacterNameFilterNumber.elementAt(i);
+			sComparatorString = vCharacterNameFilterNumber.get(i);
 			if (str.contains(sComparatorString)) {
 				return Constants.NAME_DECLINED_IS_NUMBER;
 			}
 		}
 		for (int i = 0; i < vCharacterNameFilterProfane.size(); i++) {
-			sComparatorString = vCharacterNameFilterProfane.elementAt(i);
+			sComparatorString = vCharacterNameFilterProfane.get(i);
 			if (str.contains(sComparatorString)) {
 				return Constants.NAME_DECLINED_IS_PROFANE;
 			}
 		}
 		for (int i = 0; i < vCharacterNameFilterSyntax.size(); i++) {
-			sComparatorString = vCharacterNameFilterSyntax.elementAt(i);
+			sComparatorString = vCharacterNameFilterSyntax.get(i);
 			if (str.contains(sComparatorString)) {
 				return Constants.NAME_DECLINED_SYNTAXICALLY_WRONG;
 			}
@@ -3449,7 +3451,7 @@ public class DatabaseInterface implements Runnable {
 			// End exact match.
 			String sComparatorString = null;
 			for (int i = 0; i < vCharacterNameFilterDeveloper.size(); i++) {
-				sComparatorString = vCharacterNameFilterDeveloper.elementAt(i);
+				sComparatorString = vCharacterNameFilterDeveloper.get(i);
 				if (sFirstName.contains(sComparatorString)
 						|| sLastName.contains(sComparatorString)) {
 					System.out.println("First or last name contains comparator string.");
@@ -3463,7 +3465,7 @@ public class DatabaseInterface implements Runnable {
 				}
 			}
 			for (int i = 0; i < vCharacterNameFilterCanonical.size(); i++) {
-				sComparatorString = vCharacterNameFilterCanonical.elementAt(i);
+				sComparatorString = vCharacterNameFilterCanonical.get(i);
 				if (sFirstName.contains(sComparatorString)
 						|| sLastName.contains(sComparatorString)) {
 					return Constants.NAME_DECLINED_IS_CANONICAL;
@@ -3474,7 +3476,7 @@ public class DatabaseInterface implements Runnable {
 				}
 			}
 			for (int i = 0; i < vCharacterNameFilterNumber.size(); i++) {
-				sComparatorString = vCharacterNameFilterNumber.elementAt(i);
+				sComparatorString = vCharacterNameFilterNumber.get(i);
 				if (sFirstName.contains(sComparatorString)
 						|| sLastName.contains(sComparatorString)) {
 					return Constants.NAME_DECLINED_IS_NUMBER;
@@ -3485,7 +3487,7 @@ public class DatabaseInterface implements Runnable {
 				}
 			}
 			for (int i = 0; i < vCharacterNameFilterProfane.size(); i++) {
-				sComparatorString = vCharacterNameFilterProfane.elementAt(i);
+				sComparatorString = vCharacterNameFilterProfane.get(i);
 				if (sFirstName.contains(sComparatorString)
 						|| sLastName.contains(sComparatorString)) {
 					return Constants.NAME_DECLINED_IS_PROFANE;
@@ -3496,7 +3498,7 @@ public class DatabaseInterface implements Runnable {
 				}
 			}
 			for (int i = 0; i < vCharacterNameFilterSyntax.size(); i++) {
-				sComparatorString = vCharacterNameFilterSyntax.elementAt(i);
+				sComparatorString = vCharacterNameFilterSyntax.get(i);
 				if (sFirstName.contains(sComparatorString)
 						|| sLastName.contains(sComparatorString)) {
 					return Constants.NAME_DECLINED_SYNTAXICALLY_WRONG;
@@ -3507,9 +3509,9 @@ public class DatabaseInterface implements Runnable {
 				}
 
 			}
-			Vector<String> vServerUsedNames = server.getUsedCharacterNames();
+			List<String> vServerUsedNames = server.getUsedCharacterNames();
 			for (int i = 0; i < vServerUsedNames.size(); i++) {
-				if (sFirstName.equalsIgnoreCase(vServerUsedNames.elementAt(i))) {
+				if (sFirstName.equalsIgnoreCase(vServerUsedNames.get(i))) {
 					return Constants.NAME_DECLINED_IS_TAKEN;
 				}
 				if (sComparatorString.contains(sFirstName)
@@ -3559,8 +3561,8 @@ public class DatabaseInterface implements Runnable {
 	 *            -- The Server ID.
 	 * @return The list of spawned resources.
 	 */
-	protected Vector<SpawnedResourceData> loadResources(int iServerID) {
-		Vector<SpawnedResourceData> resources = new Vector<SpawnedResourceData>();
+	protected List<SpawnedResourceData> loadResources(int iServerID) {
+		List<SpawnedResourceData> resources = new ArrayList<SpawnedResourceData>();
 		try {
 			String query = "Select * from `resources` where `server_id` = "
 					+ iServerID + ";";
@@ -3597,8 +3599,8 @@ public class DatabaseInterface implements Runnable {
 	 * @param iServerID
 	 */
 	protected void saveAllResourcesToDatabase(
-			Vector<SpawnedResourceData> vSpawnedResources,
-			Vector<SpawnedResourceData> vDespawnedResources, int iServerID) {
+			List<SpawnedResourceData> vSpawnedResources,
+			List<SpawnedResourceData> vDespawnedResources, int iServerID) {
 		ByteArrayOutputStream bOut = null;
 
 		ObjectOutputStream oOut = null;
@@ -3610,7 +3612,7 @@ public class DatabaseInterface implements Runnable {
 				bOut = new ByteArrayOutputStream();
 				oOut = new ObjectOutputStream(bOut);
 				SpawnedResourceData resourceData = vSpawnedResources
-						.elementAt(i);
+						.get(i);
 				String query = "Select * from `resources` where resource_id = "
 						+ resourceData.getID() + ";";
 				if (statement.execute(query)) {
@@ -3667,10 +3669,10 @@ public class DatabaseInterface implements Runnable {
 	 * @param sTemplateLike
 	 * @return - Vector<ItemTemplate>
 	 */
-	protected static Vector<ItemTemplate> getSimilarTemplates(
+	protected static List<ItemTemplate> getSimilarTemplates(
 			String sTemplateLike) {
 		sTemplateLike = sTemplateLike.toLowerCase();
-		Vector<ItemTemplate> retval = new Vector<ItemTemplate>();
+		List<ItemTemplate> retval = new ArrayList<ItemTemplate>();
 		Enumeration<ItemTemplate> templateEnumerator = vItemTemplateData
 				.elements();
 		try {
@@ -3779,11 +3781,11 @@ public class DatabaseInterface implements Runnable {
 		}
 	}
 
-	public Vector<SWGEmail> getAllEmailsForPlayer(long objectID, int serverID) {
+	public List<SWGEmail> getAllEmailsForPlayer(long objectID, int serverID) {
 		String query = "Select * from `email` where `player_id` = " + objectID
 				+ " and `server_id` = " + serverID + ";";
 		try {
-			Vector<SWGEmail> vEmails = new Vector<SWGEmail>();
+			List<SWGEmail> vEmails = new ArrayList<SWGEmail>();
 			Statement s = conn.createStatement();
 			if (s.execute(query)) {
 				ResultSet result = s.getResultSet();
@@ -3815,11 +3817,11 @@ public class DatabaseInterface implements Runnable {
 
 	}
 
-	public Vector<SWGEmail> getNewEmailsForPlayer(long objectID, int serverID) {
+	public List<SWGEmail> getNewEmailsForPlayer(long objectID, int serverID) {
 		String query = "Select * from `email` where `player_id` = " + objectID
 				+ " and `server_id` = " + serverID + ";";
 		try {
-			Vector<SWGEmail> vEmails = new Vector<SWGEmail>();
+			List<SWGEmail> vEmails = new ArrayList<SWGEmail>();
 			Statement s = conn.createStatement();
 			if (s.execute(query)) {
 				ResultSet result = s.getResultSet();
@@ -3944,10 +3946,10 @@ public class DatabaseInterface implements Runnable {
 		}
 	}
 
-	public Vector<Integer> getAllUsedEmailID(int iServerID) {
+	public List<Integer> getAllUsedEmailID(int iServerID) {
 		String query = "Select `email_id` from `email` where `server_id` = "
 				+ iServerID + ";";
-		Vector<Integer> vIDs = new Vector<Integer>();
+		List<Integer> vIDs = new ArrayList<Integer>();
 		try {
 			Statement s = conn.createStatement();
 			if (s.execute(query)) {
@@ -4060,11 +4062,11 @@ public class DatabaseInterface implements Runnable {
 		return vRadialTemplateData;
 	}
 
-	public Hashtable<Integer, Vector<MapLocationData>> loadStaticMapLocations(
+	public Hashtable<Integer, List<MapLocationData>> loadStaticMapLocations(
 			ZoneServer server) {
-		Hashtable<Integer, Vector<MapLocationData>> dataTable = new Hashtable<Integer, Vector<MapLocationData>>();
+		Hashtable<Integer, List<MapLocationData>> dataTable = new Hashtable<Integer, List<MapLocationData>>();
 		for (int i = 0; i < Constants.PlanetNames.length; i++) {
-			dataTable.put(i, new Vector<MapLocationData>());
+			dataTable.put(i, new ArrayList<MapLocationData>());
 		}
 		try {
 			String query = "Select * from `planetlocationmap` where `playerMade` = 0;";
@@ -4098,11 +4100,11 @@ public class DatabaseInterface implements Runnable {
 		return dataTable;
 	}
 
-	public Hashtable<Integer, Vector<MapLocationData>> loadPlayerMapLocations(
+	public Hashtable<Integer, List<MapLocationData>> loadPlayerMapLocations(
 			ZoneServer server) {
-		Hashtable<Integer, Vector<MapLocationData>> dataTable = new Hashtable<Integer, Vector<MapLocationData>>();
+		Hashtable<Integer, List<MapLocationData>> dataTable = new Hashtable<Integer, List<MapLocationData>>();
 		for (int i = 0; i < Constants.PlanetNames.length; i++) {
-			dataTable.put(i, new Vector<MapLocationData>());
+			dataTable.put(i, new ArrayList<MapLocationData>());
 		}
 		try {
 			String query = "Select * from `planetlocationmap` where `playerMade` = 1;";
@@ -4159,9 +4161,9 @@ public class DatabaseInterface implements Runnable {
 		}
 	}
 
-	public Vector<Terminal> loadServerTerminals(ZoneServer server) {
+	public List<Terminal> loadServerTerminals(ZoneServer server) {
 
-		Vector<Terminal> retval = new Vector<Terminal>();
+		List<Terminal> retval = new ArrayList<Terminal>();
 		String query = "Select * from `terminals` where `spawn` = 1 and `packed` = 0 and `destroy` = 0";
 		try {
 			Statement s = conn.createStatement();
@@ -4334,7 +4336,7 @@ public class DatabaseInterface implements Runnable {
 							} else if (Profession.contains("Ranger")) {
 								Profession = "ranger_trainer";
 							}
-							Vector<ItemTemplate> tL = getSimilarTemplates("dressed_"
+							List<ItemTemplate> tL = getSimilarTemplates("dressed_"
 									+ Profession);
 
 							if (tL != null) {
@@ -4379,10 +4381,10 @@ public class DatabaseInterface implements Runnable {
 		return retval;
 	}
 
-	public Vector<Terminal> LoadServerTerminals(ZoneServer server,
+	public List<Terminal> LoadServerTerminals(ZoneServer server,
 			long TerminalID) {
 
-		Vector<Terminal> retval = new Vector<Terminal>();
+		List<Terminal> retval = new ArrayList<Terminal>();
 		String query = "Select * from `terminals` where `spawn` = 1 and `packed` = 0 and `destroy` = 0 and terminals_id = "
 				+ TerminalID;
 		try {
@@ -4501,7 +4503,7 @@ public class DatabaseInterface implements Runnable {
 								Profession = "squad_leader_trainer";
 							}
 							// System.out.println("Profession: " + Profession);
-							Vector<ItemTemplate> tL = getSimilarTemplates("dressed_"
+							List<ItemTemplate> tL = getSimilarTemplates("dressed_"
 									+ Profession);
 
 							if (tL != null && !tL.isEmpty()) {
@@ -4616,9 +4618,9 @@ public class DatabaseInterface implements Runnable {
 		return retval;
 	}
 
-	public Vector<TravelDestination> getAllTravelDestinations() {
+	public List<TravelDestination> getAllTravelDestinations() {
 
-		Vector<TravelDestination> retval = new Vector<TravelDestination>();
+		List<TravelDestination> retval = new ArrayList<TravelDestination>();
 
 		String query = "Select * from `tickets` order by `id`";
 		try {
@@ -4691,8 +4693,8 @@ public class DatabaseInterface implements Runnable {
 		return retval;
 	}
 
-	public Vector<Shuttle> loadShuttles() {
-		Vector<Shuttle> retval = new Vector<Shuttle>();
+	public List<Shuttle> loadShuttles() {
+		List<Shuttle> retval = new ArrayList<Shuttle>();
 		String query = "Select * from `shuttles`";
 		try {
 			Statement s = conn.createStatement();
@@ -4819,9 +4821,9 @@ public class DatabaseInterface implements Runnable {
 		return retval;
 	}
 
-	protected static Vector<POI> getPOIListForPlanetID(int planetID) {
+	protected static List<POI> getPOIListForPlanetID(int planetID) {
 		if (planetID > 9) {
-			return new Vector<POI>();
+			return new ArrayList<POI>();
 		}
 		return vPOIsByPlanetID.get(planetID);
 	}
@@ -4836,9 +4838,9 @@ public class DatabaseInterface implements Runnable {
 				while (result.next()) {
 					// public POI(float px, float py, int pplanet, int pbid){
 					int planetID = result.getInt("planetID");
-					Vector<POI> vPOIsThisPlanet = vPOIsByPlanetID.get(planetID);
+					List<POI> vPOIsThisPlanet = vPOIsByPlanetID.get(planetID);
 					if (vPOIsThisPlanet == null) {
-						vPOIsThisPlanet = new Vector<POI>();
+						vPOIsThisPlanet = new ArrayList<POI>();
 						vPOIsByPlanetID.put(planetID, vPOIsThisPlanet);
 					}
 					vPOIsThisPlanet
@@ -4873,8 +4875,8 @@ public class DatabaseInterface implements Runnable {
 		}
 	}
 
-	protected Vector<NPCTemplate> getNPCTemplates() {
-		Vector<NPCTemplate> retval = new Vector<NPCTemplate>();
+	protected List<NPCTemplate> getNPCTemplates() {
+		List<NPCTemplate> retval = new ArrayList<NPCTemplate>();
 		String query = "Select * from `npc_template`";
 		try {
 			Statement s = conn.createStatement();
@@ -4913,8 +4915,8 @@ public class DatabaseInterface implements Runnable {
 		return retval;
 	}
 
-	protected Vector<String> getTesterPunchList() {
-		Vector<String> retval = new Vector<String>();
+	protected List<String> getTesterPunchList() {
+		List<String> retval = new ArrayList<String>();
 		String query = "Select * from `testerpunchlist` order by `priority`;";
 		try {
 			Statement s = conn.createStatement();
@@ -5008,8 +5010,8 @@ public class DatabaseInterface implements Runnable {
 		return retval;
 	}
 
-	protected Vector<LairTemplate> getAllLairTemplates() {
-		Vector<LairTemplate> retval = new Vector<LairTemplate>();
+	protected List<LairTemplate> getAllLairTemplates() {
+		List<LairTemplate> retval = new ArrayList<LairTemplate>();
 		String query = "Select * from `lair_template` order by `id`;";
 		try {
 			Statement s = conn.createStatement();
@@ -5198,9 +5200,9 @@ public class DatabaseInterface implements Runnable {
 	 * "DatabaseInterface", ZoneServer.ZoneRunOptions.bLogToConsole, true, e); }
 	 * return 32767.0f; }
 	 */
-	protected Vector<MissionTemplate> getMissionTemplates(int iTerminalType,
+	protected List<MissionTemplate> getMissionTemplates(int iTerminalType,
 			int iPlanetID) {
-		Vector<MissionTemplate> retval = new Vector<MissionTemplate>();
+		List<MissionTemplate> retval = new ArrayList<MissionTemplate>();
 		try {
 			Enumeration<MissionTemplate> mT = vMissionTemplateData.elements();
 			while (mT.hasMoreElements()) {
@@ -5283,9 +5285,9 @@ public class DatabaseInterface implements Runnable {
 		return retval;
 	}
 
-	protected Vector<MissionCollateral> getMissionCollateralVector(
+	protected List<MissionCollateral> getMissionCollateralVector(
 			int missionid, int planetid) {
-		Vector<MissionCollateral> retval = new Vector<MissionCollateral>();
+		List<MissionCollateral> retval = new ArrayList<MissionCollateral>();
 		try {
 			Enumeration<MissionCollateral> mC = vMissionCollateralData
 					.elements();
@@ -5731,9 +5733,9 @@ public class DatabaseInterface implements Runnable {
 
 	// TODO: Make static
 	public static DeedTemplate getDeedTemplateByID(int templateID) {
-		Enumeration<DeedTemplate> dTEnum = vDeedTemplates.elements();
-		while (dTEnum.hasMoreElements()) {
-			DeedTemplate t = dTEnum.nextElement();
+		Iterator<DeedTemplate> dTEnum = vDeedTemplates.listIterator();
+		while (dTEnum.equals(conn)) {
+			DeedTemplate t = dTEnum.next();
 			if (t.getTemplateid() == templateID) {
 				return t;
 			}
@@ -5742,9 +5744,9 @@ public class DatabaseInterface implements Runnable {
 	}
 
 	public static DeedTemplate getDeedTemplateByObjectTemplateID(int templateID) {
-		Enumeration<DeedTemplate> dTEnum = vDeedTemplates.elements();
-		while (dTEnum.hasMoreElements()) {
-			DeedTemplate t = dTEnum.nextElement();
+		Iterator<DeedTemplate> dTEnum = vDeedTemplates.iterator();
+		while (dTEnum.equals(conn)) {
+			DeedTemplate t = dTEnum.next();
 			if (t.getObject_template_id() == templateID) {
 				return t;
 			}
@@ -5752,7 +5754,7 @@ public class DatabaseInterface implements Runnable {
 		return null;
 	}
 
-	public static Vector<DeedTemplate> getAllDeedTemplates() {
+	public static List<DeedTemplate> getAllDeedTemplates() {
 		return vDeedTemplates;
 	}
 
@@ -5769,9 +5771,9 @@ public class DatabaseInterface implements Runnable {
 			// camp Deeds
 			144, 145, 146, 147, 148, 149, };
 
-	public static Vector<DeedTemplate> getBlueFrogDeedTemplates() {
+	public static List<DeedTemplate> getBlueFrogDeedTemplates() {
 
-		Vector<DeedTemplate> vBFT = new Vector<DeedTemplate>();
+		List<DeedTemplate> vBFT = new ArrayList<DeedTemplate>();
 		for (int i = 0; i < vDeedTemplates.size(); i++) {
 			for (int d = 0; d < bfdt.length; d++) {
 				if (vDeedTemplates.get(i).getTemplateid() == bfdt[d]) {
@@ -5784,8 +5786,8 @@ public class DatabaseInterface implements Runnable {
 	}
 
 	// wearable templates for blue frog
-	public static Vector<String> getTools() {
-		Vector<String> vToolsList = new Vector<String>();
+	public static List<String> getTools() {
+		List<String> vToolsList = new ArrayList<String>();
 		vToolsList.add("Survey Tools");
 		return vToolsList;
 	};
@@ -5794,8 +5796,8 @@ public class DatabaseInterface implements Runnable {
 			14043, 14044, 14045, 8926,},// survey tools
 	};
 
-	public static Vector<String> getWearablesSets() {
-		Vector<String> vWearablesSet = new Vector<String>();// 26 sets
+	public static List<String> getWearablesSets() {
+		List<String> vWearablesSet = new ArrayList<String>();// 26 sets
 		vWearablesSet.add("Aprons");
 		vWearablesSet.add("BackPacks");
 		vWearablesSet.add("Bandoliers");
@@ -5957,8 +5959,8 @@ public static int[][] weaponset = {
 			{ 15073, },// melee 1
 			{ 15231, },// ranged
 	};
-	protected static Vector<String> getArmorSet() {
-		Vector<String> vArmorSet = new Vector<String>();
+	protected static List<String> getArmorSet() {
+		List<String> vArmorSet = new ArrayList<String>();
 		vArmorSet.add("Bone Armor");
 		vArmorSet.add("Bounty Hunter");
 		vArmorSet.add("Chitin");
@@ -5982,15 +5984,15 @@ public static int[][] weaponset = {
 		vArmorSet.add("Zam");
 		return vArmorSet;
 	}
-protected static Vector<String> getWeaponSet() {
-		Vector<String> vWeaponSet = new Vector<String>();
+protected static List<String> getWeaponSet() {
+		List<String> vWeaponSet = new ArrayList<String>();
 		vWeaponSet.add("Jedi Weapons");
                 vWeaponSet.add("Melee Weapons");
                 vWeaponSet.add("Ranged Weapons");
 		return vWeaponSet;
 	}
-	protected static Vector<ItemTemplate> getItemTemplateWearableGroup(int group) {
-		Vector<ItemTemplate> vTL = new Vector<ItemTemplate>();
+	protected static List<ItemTemplate> getItemTemplateWearableGroup(int group) {
+		List<ItemTemplate> vTL = new ArrayList<ItemTemplate>();
 		for (int i = 0; i < wearables[group].length; i++) {
 			ItemTemplate T = getTemplateDataByID(wearables[group][i]);
 			vTL.add(T);
@@ -5998,24 +6000,24 @@ protected static Vector<String> getWeaponSet() {
 		return vTL;
 	}
 
-	protected static Vector<ItemTemplate> getItemTemplateArmorGroup(int group) {
-		Vector<ItemTemplate> vTL = new Vector<ItemTemplate>();
+	protected static List<ItemTemplate> getItemTemplateArmorGroup(int group) {
+		List<ItemTemplate> vTL = new ArrayList<ItemTemplate>();
 		for (int i = 0; i < warmorset[group].length; i++) {
 			ItemTemplate T = getTemplateDataByID(warmorset[group][i]);
 			vTL.add(T);
 		}
 		return vTL;
 	}
-protected static Vector<ItemTemplate> getItemTemplateWeaponGroup(int group) {
-		Vector<ItemTemplate> vTL = new Vector<ItemTemplate>();
+protected static List<ItemTemplate> getItemTemplateWeaponGroup(int group) {
+		List<ItemTemplate> vTL = new ArrayList<ItemTemplate>();
 		for (int i = 0; i < weaponset[group].length; i++) {
 			ItemTemplate T = getTemplateDataByID(weaponset[group][i]);
 			vTL.add(T);
 		}
 		return vTL;
 	}
-	protected static Vector<ItemTemplate> getItemTemplateToolsGroup(int group) {
-		Vector<ItemTemplate> vTL = new Vector<ItemTemplate>();
+	protected static List<ItemTemplate> getItemTemplateToolsGroup(int group) {
+		List<ItemTemplate> vTL = new ArrayList<ItemTemplate>();
 		for (int i = 0; i < tools[group].length; i++) {
 			ItemTemplate T = getTemplateDataByID(tools[group][i]);
 			vTL.add(T);
@@ -6125,10 +6127,10 @@ protected static Vector<ItemTemplate> getItemTemplateWeaponGroup(int group) {
 					populateComponentList(r, schematic);
 
 					if (requiredSkill != 0) {
-						Vector<CraftingSchematic> vSchematicListForSkill = vSchematicsBySkillID
+						List<CraftingSchematic> vSchematicListForSkill = vSchematicsBySkillID
 								.get(requiredSkill);
 						if (vSchematicListForSkill == null) {
-							vSchematicListForSkill = new Vector<CraftingSchematic>();
+							vSchematicListForSkill = new ArrayList<CraftingSchematic>();
 							vSchematicsBySkillID.put(requiredSkill,
 									vSchematicListForSkill);
 						}
@@ -6143,12 +6145,12 @@ protected static Vector<ItemTemplate> getItemTemplateWeaponGroup(int group) {
 			s.close();
 			s = null;
 			vSchematicsByIndex = new CraftingSchematic[2000]; // The last one.
-			Iterator<Vector<CraftingSchematic>> vSchematicItr = vSchematicsBySkillID
+			Iterator<List<CraftingSchematic>> vSchematicItr = vSchematicsBySkillID
 					.values().iterator();
 			while (vSchematicItr.hasNext()) {
-				Vector<CraftingSchematic> vSchematics = vSchematicItr.next();
+				List<CraftingSchematic> vSchematics = vSchematicItr.next();
 				for (int j = 0; j < vSchematics.size(); j++) {
-					CraftingSchematic sch = vSchematics.elementAt(j);
+					CraftingSchematic sch = vSchematics.get(j);
 					vSchematicsByIndex[sch.getIndex()] = sch;
 				}
 			}
@@ -6163,7 +6165,7 @@ protected static Vector<ItemTemplate> getItemTemplateWeaponGroup(int group) {
 
 	}
 
-	protected static Vector<CraftingSchematic> getAllSchematicsForSkill(
+	protected static List<CraftingSchematic> getAllSchematicsForSkill(
 			int skillID) {
 		return vSchematicsBySkillID.get(skillID);
 	}
@@ -6338,7 +6340,7 @@ protected static Vector<ItemTemplate> getItemTemplateWeaponGroup(int group) {
 		int offset = 110;
 		int numFieldsPerExperimentalAttribute = 14;
 		boolean bHasAttribute = true;
-		Vector<CraftingExperimentationAttribute> vAttributes = new Vector<CraftingExperimentationAttribute>();
+		List<CraftingExperimentationAttribute> vAttributes = new ArrayList<CraftingExperimentationAttribute>();
 		for (int i = 0; i < 15 && bHasAttribute; i++) {
 			String stfExperimentalName = r.getString(offset);
 			if (stfExperimentalName != null) {
@@ -6511,7 +6513,7 @@ protected static Vector<ItemTemplate> getItemTemplateWeaponGroup(int group) {
 
 		c.setNumAttributes(vAttributes.size());
 		for (int i = 0; i < vAttributes.size(); i++) {
-			c.addAttribute(i, vAttributes.elementAt(i));
+			c.addAttribute(i, vAttributes.get(i));
 		}
 		// }
 	}
@@ -7768,7 +7770,7 @@ protected static Vector<ItemTemplate> getItemTemplateWeaponGroup(int group) {
 		}
 	}
 
-	protected static Vector<StartingLocation> getStartingLocations() {
+	protected static List<StartingLocation> getStartingLocations() {
 		return vStartingLocations;
 	}
 
@@ -7964,7 +7966,7 @@ protected static Vector<ItemTemplate> getItemTemplateWeaponGroup(int group) {
 	}
 
 	protected static void saveReceivedRadials(
-			Vector<RadialMenuItem> vReceivedRadials) {
+			List<RadialMenuItem> vReceivedRadials) {
 		try {
 			String query = "";
 			Statement s = conn.createStatement();
@@ -8444,7 +8446,7 @@ protected static Vector<ItemTemplate> getItemTemplateWeaponGroup(int group) {
 		return bEncryptPasswords;
 	}
 
-	protected static void updateInstrumentationPlayers(Vector<Player> PlayerList) {
+	protected static void updateInstrumentationPlayers(List<Player> PlayerList) {
 		// ANOTHER memory leak!
 		Statement s = null;
 		try {
@@ -8562,7 +8564,7 @@ protected static Vector<ItemTemplate> getItemTemplateWeaponGroup(int group) {
 			case Constants.LOGIN_INTEGRATION_VBULLETIN: {
 				// Do stuff
 				for (int j = 0; j < vAccounts.size(); j++) {
-					AccountData data = vAccounts.elementAt(j);
+					AccountData data = vAccounts.get(j);
 					String sUsername = data.getUsername();
 					String sPassword = data.getPassword();
 					if (sPassword.isEmpty()) {

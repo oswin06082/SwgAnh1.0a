@@ -443,7 +443,7 @@ public class Deed extends TangibleItem {
                                 allowedtoplace = true;
                             }
                         }
-                        if(dT!=null && allowedtoplace)
+                        
                         {                            
                             ItemTemplate t = client.getServer().getTemplateData(dT.getObject_iff_template_id());                
                             if(t!=null)
@@ -457,7 +457,7 @@ public class Deed extends TangibleItem {
                                 client.insertPacket(PacketFactory.buildChatSystemMessage("Structure Template Error, Contact a CSR. Code:" + deedTemplateID));
                             }
                         }
-                        else if(!allowedtoplace)
+                        
                         {
                             client.insertPacket(PacketFactory.buildChatSystemMessage(
                             		"player_structure",
@@ -478,7 +478,7 @@ public class Deed extends TangibleItem {
                             		0f, false));
 
                         }
-                        else
+                        
                         {
                             client.insertPacket(PacketFactory.buildChatSystemMessage("Structure Template Error, Contact a CSR. Code:" + deedTemplateID));
                         }
@@ -752,7 +752,7 @@ public class Deed extends TangibleItem {
                 {
                     if(client.getPlayer().hasSkill(DatabaseInterface.getTemplateDataByID(this.getTemplateID()).getRequiredSkillID()))
                     {
-                        Vector<SOEObject> vNearbyObjects = server.getWorldObjectsAroundObject(client.getPlayer());
+                        List<SOEObject> vNearbyObjects = server.getWorldObjectsAroundObject(client.getPlayer());
                         boolean hasClearance = true;
                         for(int i = 0; i < vNearbyObjects.size();i++)
                         {
